@@ -1,5 +1,6 @@
 package com.example.spring_api.service;
 
+import com.example.spring_api.dto.MemberUpdateDto;
 import com.example.spring_api.model.Member;
 import com.example.spring_api.model.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,13 @@ public class MemberService {
         validateDuplicateMember(member);
         memberRepository.save(member);
         return member.getId();
+    }
+
+    @Transactional
+    public void updateMember(Long id, MemberUpdateDto updateDto) {
+        Member member = findOne(id);
+        member.setName(updateDto.getName());
+        member.setEmail(updateDto.getEmail());
     }
 
     private void validateDuplicateMember(Member member) {

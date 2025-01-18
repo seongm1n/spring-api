@@ -1,7 +1,9 @@
 package com.example.spring_api.controller;
 
+import com.example.spring_api.dto.MemberUpdateDto;
 import com.example.spring_api.model.Member;
 import com.example.spring_api.service.MemberService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,5 +33,13 @@ public class MemberController {
     public ResponseEntity<Member> getMember(@PathVariable Long id) {
         Member member = memberService.findOne(id);
         return ResponseEntity.ok(member);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> updateMember(
+            @PathVariable Long id,
+            @Valid @RequestBody MemberUpdateDto updateDto) {
+        memberService.updateMember(id, updateDto);
+        return ResponseEntity.ok().build();
     }
 }
