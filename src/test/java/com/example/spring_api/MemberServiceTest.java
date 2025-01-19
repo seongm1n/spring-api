@@ -1,5 +1,6 @@
 package com.example.spring_api;
 
+import com.example.spring_api.dto.MemberUpdateDto;
 import com.example.spring_api.model.Member;
 import com.example.spring_api.model.MemberRepository;
 import com.example.spring_api.service.MemberService;
@@ -56,5 +57,39 @@ class MemberServiceTest {
         assertThrows(IllegalStateException.class, () -> {
             memberService.join(member2);
         });
+    }
+
+    @Test
+    void 회원정보_수정() {
+        // given
+        Member member = new Member();
+        member.setName("홍길동");
+        member.setEmail("hong@test.com");
+        member.setPassword("1234");
+        Long savedId = memberService.join(member);
+
+        // when
+        MemberUpdateDto updateDto = new MemberUpdateDto();
+        updateDto.setName("홍길동2");
+        updateDto.setEmail("hong2@test.com");
+        memberService.updateMember(savedId, updateDto);
+
+        // then
+        Member updatedMember = memberService.findOne(savedId);
+        assertThat(updatedMember.getName()).isEqualTo("홍길동2");
+        assertThat(updatedMember.getEmail()).isEqualTo("hong2@test.com");
+    }
+
+    @Test
+    void 존재하지_않는_회원_수정() {
+        // given
+        MemberUpdateDto updateDto = new MemberUpdateDto();
+        updateDto.setName("홍길동2");
+        updateDto.setEmail("hong2@test.com");
+
+        // when & then
+        assertThatThrownBy(() -> memberService.updateMember(999L, updateDto))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("존재하지 않는 회원입니다");
     }
 }
