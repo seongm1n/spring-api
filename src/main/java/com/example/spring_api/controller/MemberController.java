@@ -42,4 +42,10 @@ public class MemberController {
         memberService.updateMember(id, updateDto);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<Member>> searchMembers(@RequestParam String keyword) {
+        List<Member> members = memberService.searchMembers(keyword);
+        return ResponseEntity.ok(members);
+    }
 }

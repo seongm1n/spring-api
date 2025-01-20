@@ -44,4 +44,11 @@ public class MemberService {
         return memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalStateException("존재하지 않는 회원입니다."));
     }
+
+    public List<Member> searchMembers(String keyword) {
+        if (keyword == null || keyword.trim().isEmpty()) {
+            throw new IllegalArgumentException("검색어를 입력해주세요");
+        }
+        return memberRepository.findByNameContainingOrEmailContaining(keyword, keyword);
+    }
 }
