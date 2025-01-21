@@ -48,4 +48,10 @@ public class MemberController {
         List<Member> members = memberService.searchMembers(keyword);
         return ResponseEntity.ok(members);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteMember(@PathVariable Long id) {
+        memberService.deleteMember(id);
+        return ResponseEntity.ok().build();
+    }
 }

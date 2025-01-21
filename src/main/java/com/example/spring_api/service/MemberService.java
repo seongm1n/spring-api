@@ -51,4 +51,11 @@ public class MemberService {
         }
         return memberRepository.findByNameContainingOrEmailContaining(keyword, keyword);
     }
+
+    @Transactional
+    public void deleteMember(Long id) {
+        Member member = memberRepository.findById(id)
+                .orElseThrow(() -> new IllegalStateException("존재하지 않는 회원입니다."));
+        memberRepository.delete(member);
+    }
 }
