@@ -1,6 +1,7 @@
 package com.example.spring_api.service;
 
 import com.example.spring_api.dto.MemberUpdateDto;
+import com.example.spring_api.exception.MemberNotFoundException;
 import com.example.spring_api.model.Member;
 import com.example.spring_api.model.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -40,11 +41,6 @@ public class MemberService {
         return memberRepository.findAll();
     }
 
-    public Member findOne(Long memberId) {
-        return memberRepository.findById(memberId)
-                .orElseThrow(() -> new IllegalStateException("존재하지 않는 회원입니다."));
-    }
-
     public List<Member> searchMembers(String keyword) {
         if (keyword == null || keyword.trim().isEmpty()) {
             throw new IllegalArgumentException("검색어를 입력해주세요");
@@ -55,7 +51,12 @@ public class MemberService {
     @Transactional
     public void deleteMember(Long id) {
         Member member = memberRepository.findById(id)
-                .orElseThrow(() -> new IllegalStateException("존재하지 않는 회원입니다."));
+                .orElseThrow(() -> new MemberNotFoundException(id));
         memberRepository.delete(member);
+    }
+
+    public Member findOne(Long id) {
+        return memberRepository.findById(id)
+                .orElseThrow(() -> new MemberNotFoundException(id));
     }
 }
