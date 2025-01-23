@@ -80,4 +80,15 @@ class MemberControllerTest {
                 .andExpect(status().isBadRequest())
                 .andDo(print());
     }
+
+    @Test
+    void 존재하지_않는_회원_삭제_테스트() throws Exception {
+        // when & then
+        mockMvc.perform(delete("/api/members/{id}", 999L))
+                .andExpect(status().isNotFound())  // 404 상태 코드 확인
+                .andExpect(jsonPath("$.status").value(404))
+                .andExpect(jsonPath("$.message").value("회원을 찾을 수 없습니다. ID: 999"))
+                .andExpect(jsonPath("$.error").value("Member Not Found"))
+                .andDo(print());
+    }
 }
